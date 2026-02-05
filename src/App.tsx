@@ -17,6 +17,7 @@ import AdminSchedules from "./pages/admin/AdminSchedules";
 import NotFound from "./pages/NotFound";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import OurStory from "./pages/OurStory";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/doctors" element={<Doctors />} />
           <Route path="/doctors/:id" element={<DoctorDetail />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/ourstorys" element={<OurStory />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<AdminDashboard />}>
