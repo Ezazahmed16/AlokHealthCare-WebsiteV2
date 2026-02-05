@@ -1,8 +1,6 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import { MdArrowRightAlt } from "react-icons/md";
-// Import the specific hook and the Type definition from your file
 import { useDoctors, Doctor } from "@/hooks/useDoctors"; 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -49,25 +47,31 @@ export function FeaturedDoctors() {
   const settings = {
     className: "hero-doctor-slider",
     centerMode: false,
-    infinite: doctorCount > 3, // Prevents blank screen if few doctors
-    slidesToShow: 3,
+    infinite: doctorCount > 3,
+    slidesToShow: 3, // Desktop default
     slidesToScroll: 1,
     speed: 500,
     nextArrow: <ArrowButton direction="next" />,
     prevArrow: <ArrowButton direction="prev" />,
     responsive: [
       { 
+        // Tablet View
         breakpoint: 1024, 
         settings: { 
           slidesToShow: 2, 
+          slidesToScroll: 1,
           infinite: doctorCount > 2 
         } 
       },
       { 
-        breakpoint: 640, 
+        // Mobile View
+        breakpoint: 768, 
         settings: { 
           slidesToShow: 1, 
-          infinite: doctorCount > 1 
+          slidesToScroll: 1,
+          infinite: doctorCount > 1,
+          arrows: true, // Optional: hide arrows on small mobile to save space
+          dots: true     // Optional: add dots for better mobile navigation
         } 
       },
     ],

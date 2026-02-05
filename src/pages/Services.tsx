@@ -1,6 +1,9 @@
 import { Layout } from "@/components/layout/Layout";
-import { CTA } from "@/components/home/CTA";
-import { Droplet, Scan, Heart, Bug, Clock, FileText } from "lucide-react";
+import testIcon4 from "/public/test_icon4.png";
+import testIcon2 from "/public/test_icon2.png";
+import testIcon1 from "/public/test_icon1.png";
+import testIcon3 from "/public/test_icon3.png";
+
 import {
   Table,
   TableBody,
@@ -9,13 +12,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Clock, FileText } from "lucide-react";
 
 // Test categories with icons
 const categories = [
-  { id: "blood", label: "রক্ত পরীক্ষা", icon: Droplet, bgColor: "bg-red-100", iconColor: "text-red-500" },
-  { id: "imaging", label: "এক্স-রে ও ইমেজিং", icon: Scan, bgColor: "bg-blue-100", iconColor: "text-blue-500" },
-  { id: "cardio", label: "হৃদরোগ পরীক্ষা", icon: Heart, bgColor: "bg-pink-100", iconColor: "text-pink-500" },
-  { id: "infection", label: "সংক্রমণ ও ভাইরাস পরীক্ষা", icon: Bug, bgColor: "bg-amber-100", iconColor: "text-amber-500" },
+  { id: "blood", label: "রক্ত পরীক্ষা", icon: testIcon4, bgColor: "bg-red-100", iconColor: "text-red-500" },
+  { id: "imaging", label: "এক্স-রে ও ইমেজিং", icon: testIcon1, bgColor: "bg-blue-100", iconColor: "text-blue-500" },
+  { id: "cardio", label: "হৃদরোগ পরীক্ষা", icon: testIcon2, bgColor: "bg-pink-100", iconColor: "text-pink-500" },
+  { id: "infection", label: "সংক্রমণ ও ভাইরাস পরীক্ষা", icon: testIcon3, bgColor: "bg-amber-100", iconColor: "text-amber-500" },
 ];
 
 // Test data organized by category
@@ -53,7 +57,7 @@ const testsData = {
 // Test table component
 const TestTable = ({ categoryId, categoryLabel }: { categoryId: string; categoryLabel: string }) => {
   const tests = testsData[categoryId as keyof typeof testsData];
-  
+
   return (
     <div className="mb-12">
       <h2 className="text-xl md:text-2xl font-bold text-secondary text-center mb-6">
@@ -102,16 +106,19 @@ const Services = () => {
     <Layout>
       {/* Hero Section */}
       <section className="relative bg-secondary overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-20"
-          style={{ 
-            backgroundImage: "url('https://images.unsplash.com/photo-1579154204601-01588f351e67?w=1920&q=80')" 
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-90 min-h-full w-full"
+          style={{
+            backgroundImage: "url('/test_banner.png')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-secondary/80 to-secondary" />
-        
-        <div className="container relative z-10 py-12 md:py-20 text-center">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+        <div className="absolute inset-0 bg-gradient-to-b" />
+
+        <div className="container relative z-10 py-12 md:py-20 text-[###F9FAFB]">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 mx-auto text-center">
             নির্ভুল ও সাশ্রয়ী স্বাস্থ্য পরীক্ষা করুন!
           </h1>
           <p className="text-white/80 text-lg max-w-2xl mx-auto">
@@ -120,8 +127,8 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Category Icons */}
-      <section className="py-8 bg-muted/30 border-b border-border">
+      {/* Category Icons Section */}
+      <section className="py-12 bg-muted/30 border-b border-border">
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
             {categories.map((cat) => (
@@ -130,8 +137,12 @@ const Services = () => {
                 href={`#${cat.id}`}
                 className="flex flex-col items-center gap-2 p-4 rounded-xl bg-card border border-border hover:shadow-md transition-all"
               >
-                <div className={`h-14 w-14 rounded-xl ${cat.bgColor} flex items-center justify-center`}>
-                  <cat.icon className={`h-7 w-7 ${cat.iconColor}`} />
+                <div className={`h-18 w-18 rounded-xl ${cat.bgColor} flex items-center justify-center overflow-hidden p-2`}>
+                  <img
+                    src={cat.icon}
+                    alt={cat.label}
+                    className="h-full w-full object-contain"
+                  />
                 </div>
                 <span className="text-sm font-medium text-foreground text-center">{cat.label}</span>
               </a>
@@ -141,8 +152,8 @@ const Services = () => {
       </section>
 
       {/* All Test Tables */}
-      <section className="py-12 md:py-16">
-        <div className="container max-w-5xl">
+      <section className="py-24 md:py-16">
+        <div className="container">
           <div id="blood">
             <TestTable categoryId="blood" categoryLabel="রক্ত পরীক্ষা" />
           </div>
@@ -157,8 +168,6 @@ const Services = () => {
           </div>
         </div>
       </section>
-
-      <CTA />
     </Layout>
   );
 };
