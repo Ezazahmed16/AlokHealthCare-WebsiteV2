@@ -63,12 +63,15 @@ const Doctors = () => {
   return (
     <Layout>
       {/* Hero Section with Search */}
-      <section className="relative overflow-hidden h-72">
+      <section className="relative overflow-hidden h-full">
         {/* Background Image */}
         <div 
-          className="absolute inset-2 bg-cover bg-center opacity-100"
+          className="absolute inset-2 bg-cover bg-center h-full w-full"
           style={{ 
-            backgroundImage: "url('/doctors_bg.png')" 
+            backgroundImage: "url('/doctors_bg.png')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-secondary" />

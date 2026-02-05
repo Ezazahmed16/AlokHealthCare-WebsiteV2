@@ -80,15 +80,15 @@ const DoctorDetail = () => {
       {/* Doctor Profile Section */}
       <section className="py-8 md:py-12">
         <div className="container">
-          <h1 className="text-2xl md:text-3xl font-bold text-secondary text-center mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-[005A92] text-center mb-8">
             চিকিৎসক পরিচিতি
           </h1>
 
-          <div className="max-w-4xl mx-auto">
+          <div className=" mx-auto">
             <div className="bg-card rounded-xl border border-border shadow-card p-6 md:p-8">
               <div className="flex flex-col md:flex-row gap-6 md:gap-8">
                 {/* Doctor Image */}
-                <div className="w-full md:w-48 shrink-0">
+                <div className="min-w-[300px] md:w-48 shrink-0">
                   <div className="aspect-square rounded-xl overflow-hidden bg-muted shadow-md">
                     {doctor.image_url ? (
                       <img
@@ -109,7 +109,7 @@ const DoctorDetail = () => {
                 {/* Doctor Info */}
                 <div className="flex-1 space-y-4">
                   <div>
-                    <h2 className="text-xl md:text-2xl font-bold text-foreground mb-1">
+                    <h2 className="text-xl md:text-2xl font-bold text-[#001522] mb-1">
                       {doctor.name}
                     </h2>
                     <p className="text-secondary font-medium">
@@ -139,64 +139,66 @@ const DoctorDetail = () => {
                     <div className="flex items-start gap-2">
                       <MapPin className="h-5 w-5 mt-0.5 shrink-0 text-secondary" />
                       <div>
-                        <span className="font-medium text-foreground">অবস্থান:</span>
+                        <span className="font-medium text-foreground">চেম্বার:</span>
                         <p>{doctor.branch_name}</p>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              {/* Schedule Table */}
-              {scheduleGroups.length > 0 && (
-                <div className="mt-8">
-                  <h3 className="text-lg font-bold text-foreground mb-4 text-center">ডাক্তারের সময়সূচী</h3>
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse max-w-lg mx-auto">
-                      <thead>
-                        <tr className="bg-secondary text-white">
-                          <th className="text-left py-3 px-4 font-semibold border border-secondary">
-                            দিনসমূহ
-                          </th>
-                          <th className="text-left py-3 px-4 font-semibold border border-secondary">
-                            সাপ্তাহিক সময়সূচী
-                          </th>
-                          <th className="text-left py-3 px-4 font-semibold border border-secondary">
-                            সময়
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {scheduleGroups.map((group, index) => (
-                          <tr key={index} className="hover:bg-muted/30">
-                            <td className="py-3 px-4 border border-border text-foreground">
-                              {group.days.join(", ")}
-                            </td>
-                            <td className="py-3 px-4 border border-border text-muted-foreground">
-                              সাপ্তাহিক সময়সূচী
-                            </td>
-                            <td className="py-3 px-4 border border-border text-muted-foreground">
-                              {group.time}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  {/* Schedule Table */}
+                  {scheduleGroups.length > 0 && (
+                    <div className="mt-8">
+                      <h3 className="text-lg font-bold text-foreground mb-4 text-center">ডাক্তারের সময়সূচী</h3>
+                      <div className="overflow-x-auto">
+                        <table className="w-full border-collapse mx-auto">
+                          <thead>
+                            <tr className="bg-secondary text-white">
+                              <th className="text-left py-3 px-4 font-semibold border border-secondary">
+                                দিনসমূহ
+                              </th>
+                              <th className="text-left py-3 px-4 font-semibold border border-secondary">
+                                সাপ্তাহিক সময়সূচী
+                              </th>
+                              <th className="text-left py-3 px-4 font-semibold border border-secondary">
+                                সময়
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {scheduleGroups.map((group, index) => (
+                              <tr key={index} className="hover:bg-muted/30">
+                                <td className="py-3 px-4 border border-border text-foreground">
+                                  {group.days.join(", ")}
+                                </td>
+                                <td className="py-3 px-4 border border-border text-muted-foreground">
+                                  সাপ্তাহিক সময়সূচী
+                                </td>
+                                <td className="py-3 px-4 border border-border text-muted-foreground">
+                                  {group.time}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Appointment Button */}
+                  <div className="mt-8 hidden md:flex justify-center">
+                    <Button
+                      className="bg-primary hover:bg-primary-dark text-primary-foreground font-semibold px-8 py-3 h-auto rounded-full"
+                      asChild
+                    >
+                      <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                        অ্যাপয়েন্টমেন্ট নিন
+                      </a>
+                    </Button>
                   </div>
-                </div>
-              )}
 
-              {/* Appointment Button */}
-              <div className="mt-8 hidden md:flex justify-center">
-                <Button 
-                  className="bg-primary hover:bg-primary-dark text-primary-foreground font-semibold px-8 py-3 h-auto rounded-full"
-                  asChild
-                >
-                  <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-                    অ্যাপয়েন্টমেন্ট নিন
-                  </a>
-                </Button>
+                </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -204,7 +206,7 @@ const DoctorDetail = () => {
 
       {/* Mobile Sticky WhatsApp Button */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border z-50">
-        <Button 
+        <Button
           className="w-full bg-primary hover:bg-primary-dark text-primary-foreground font-semibold py-3 h-auto rounded-full"
           asChild
         >

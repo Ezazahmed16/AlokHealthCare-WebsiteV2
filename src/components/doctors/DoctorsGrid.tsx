@@ -1,9 +1,8 @@
 "use client";
 
-
 import { MdArrowRightAlt } from "react-icons/md";
-// Import the Doctor type from your hooks (adjust path if needed)
 import { Doctor } from "@/hooks/useDoctors";
+import { Link } from "react-router-dom";
 
 interface GridProps {
   doctors: Doctor[];
@@ -18,7 +17,7 @@ const DoctorsGrid = ({ doctors, isLoading }: GridProps) => {
   if (!doctors || doctors.length === 0) {
     return (
       <div className="py-20 text-center text-lg text-red-500">
-        কোনো ডাক্তার খুঁজে পাওয়া যায়নি।
+        কোনো ডাক্তার খুঁজে পাওয়া যায়নি।
       </div>
     );
   }
@@ -28,7 +27,7 @@ const DoctorsGrid = ({ doctors, isLoading }: GridProps) => {
       {doctors.map((doctor) => (
         <div
           key={doctor.id}
-          className="card bg-base-100 bg-white shadow-xl custom-bangla-font rounded-xl overflow-hidden"
+          className="card bg-white shadow-xl custom-bangla-font rounded-xl overflow-hidden border border-gray-100"
         >
           <figure className="h-64 md:h-80 w-full bg-gray-100 relative">
             <img
@@ -41,32 +40,35 @@ const DoctorsGrid = ({ doctors, isLoading }: GridProps) => {
             />
           </figure>
           
-          <div className="card-body text-center text-[#001522] mx-auto p-4 mt-2">
-            <h2 className="card-title text-xl md:text-xl font-bold mx-auto pb-2">
+          {/* Added items-center here to force vertical alignment to the center */}
+          <div className="card-body flex flex-col items-center text-center text-[#001522] p-6">
+            <h2 className="card-title text-xl font-bold mb-2">
               {doctor.name}
             </h2>
-            <p>
-              <span className="font-bold text-xs md:text-sm">বিশেষত্ব: </span>
-              {doctor.specialization}
-            </p>
-            <p>
-              <span className="font-bold text-xs md:text-sm">যোগ্যতা: </span>
-              {doctor.qualification}
-            </p>
-            <p>
-              <span className="font-bold text-xs md:text-sm">যোগাযোগ: </span>
-              {doctor.whatsapp_number || "Call for details"}
-            </p>
-            {/* If visitingHour exists in your DB, use it, otherwise hardcode or omit */}
-            {/* <p>({doctor.visitingHour})</p> */}
+            
+            <div className="space-y-1 mb-4">
+                <p className="text-sm md:text-base">
+                  <span className="font-bold">বিশেষত্ব: </span>
+                  {doctor.specialization}
+                </p>
+                <p className="text-sm md:text-base">
+                  <span className="font-bold">যোগ্যতা: </span>
+                  {doctor.qualification}
+                </p>
+                <p className="text-sm md:text-base">
+                  <span className="font-bold">যোগাযোগ: </span>
+                  {doctor.whatsapp_number || "Call for details"}
+                </p>
+            </div>
 
-            <div className="card-actions justify-center py-4">
-              <a href={`/doctors/${doctor.id}`}>
-                <button className="border-2 border-[#00AEEF] rounded-full py-2 px-6 flex items-center justify-center hover:bg-[#00AEEF] hover:text-white transition-all duration-300">
-                  বিস্তারিত দেখুন{" "}
+            {/* card-actions with full width centering */}
+            <div className="card-actions w-full justify-center mt-auto">
+              <Link to={`/doctors/${doctor.id}`} className="w-full flex justify-center">
+                <button className="w-fit border-2 border-[#00AEEF] text-[#00AEEF] rounded-full py-2 px-8 flex items-center justify-center hover:bg-[#00AEEF] hover:text-white transition-all duration-300 font-semibold">
+                  বিস্তারিত দেখুন
                   <MdArrowRightAlt className="h-6 w-6 ml-2" />
                 </button>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
