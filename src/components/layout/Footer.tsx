@@ -6,10 +6,10 @@ export const Footer = () => {
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
         {/* Left Section */}
         <div className="">
-          <img 
-            src="/logo.png" 
-            alt="Alok Health Care Logo" 
-            className="mb-8 w-[158px] md:w-[180px] h-[110px] md:h-[107px] mx-auto md:mx-0 object-contain" 
+          <img
+            src="/logo.png"
+            alt="Alok Health Care Logo"
+            className="mb-8 w-[158px] md:w-[180px] h-[110px] md:h-[107px] mx-auto md:mx-0 object-contain"
           />
           <p className="text-[#F9FAFB] leading-relaxed mb-6 text-center md:text-start">
             আপনার সুস্থতা আমাদের অগ্রাধিকার – নির্ভরযোগ্য স্বাস্থ্যসেবা প্রতিদিন
@@ -42,8 +42,9 @@ export const Footer = () => {
           <div className="text-center md:text-start">
             <ul className="space-y-3 text-lg">
               <li><Link to="/" className="hover:text-[#00AEEF] text-[#F9FAFB] transition-colors">হোম</Link></li>
-              <li><Link to="/about" className="hover:text-[#00AEEF] text-[#F9FAFB] transition-colors">আমাদের সম্পর্কে</Link></li>
-              <li><Link to="/services" className="hover:text-[#00AEEF] text-[#F9FAFB] transition-colors">সেবাসমূহ</Link></li>
+              <li><Link to="/ourstorys" className="hover:text-[#00AEEF] text-[#F9FAFB] transition-colors">আমাদের গল্প</Link></li>
+              <li><Link to="/doctors" className="hover:text-[#00AEEF] text-[#F9FAFB] transition-colors">ডাক্তারের সময়সূচী</Link></li>
+              <li><Link to="/services" className="hover:text-[#00AEEF] text-[#F9FAFB] transition-colors">পরীক্ষার খরচ ও বিস্তারিত</Link></li>
               <li><Link to="/contact" className="hover:text-[#00AEEF] text-[#F9FAFB] transition-colors">যোগাযোগ করুন</Link></li>
             </ul>
           </div>
