@@ -225,10 +225,13 @@ const AdminDoctors = () => {
                         src={doctor.image_url}
                         alt={doctor.name}
                         className="h-14 w-14 rounded-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.parentElement?.querySelector('.fallback-icon')?.classList.remove('hidden');
+                        }}
                       />
-                    ) : (
-                      <Users className="h-7 w-7 text-secondary" />
-                    )}
+                    ) : null}
+                    <Users className={`h-7 w-7 text-secondary ${doctor.image_url ? 'hidden' : ''} fallback-icon`} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <CardTitle className="text-base truncate">{doctor.name}</CardTitle>

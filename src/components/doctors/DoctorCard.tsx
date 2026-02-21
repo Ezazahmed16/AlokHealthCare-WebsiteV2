@@ -19,14 +19,17 @@ export function DoctorCard({ doctor, isAvailableToday }: DoctorCardProps) {
               src={doctor.image_url}
               alt={doctor.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement?.querySelector('.fallback')?.classList.remove('hidden');
+              }}
             />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-subtle">
-              <span className="text-6xl font-bold text-secondary/20">
-                {doctor.name.charAt(0)}
-              </span>
-            </div>
-          )}
+          ) : null}
+          <div className={`w-full h-full flex items-center justify-center bg-gradient-subtle ${doctor.image_url ? 'hidden' : ''} fallback`}>
+            <span className="text-6xl font-bold text-secondary/20">
+              {doctor.name.charAt(0)}
+            </span>
+          </div>
           {isAvailableToday !== undefined && (
             <Badge 
               variant={isAvailableToday ? "default" : "secondary"}
