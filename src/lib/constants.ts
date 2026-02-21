@@ -4,10 +4,10 @@ export const HOSPITAL_CONFIG = {
   tagline: "সুস্থ জীবনের শুরু এখানে,",
   taglineSub: "আলোক হেলথ কেয়ার এন্ড ডায়াগনস্টিক সলিউশন",
   description: "আপনার এবং আপনার পরিবারের সুস্থতার জন্য বিশ্বস্ত সেবা। হাজার হাজার রোগী আমাদের উপর আস্থা রেখেছেন।",
-  mainWhatsAppNumber: "+919876543210",
-  address: "রোড নং XXX, সেক্টর নং XXX, কোটা, রাজ: XXXX, ভারতবর্ষ",
-  email: "info@example.com",
-  phone: "+91 XXXXXXXXXX",
+  mainWhatsAppNumber: "+880 1332 8519 99",
+  address: "আলোক হেলথকেয়ার এন্ড ডায়গনস্টিক সলিউশন। জেলা হাসপাতালের পশ্চিম পাশে,এল-জি  শো-রুমের দ্বিতীয় তলা।",
+  email: "alokpirojpur@gmail.com",
+  phone: "+880 1332 8519 99",
 } as const;
 
 export const DAYS_OF_WEEK = [

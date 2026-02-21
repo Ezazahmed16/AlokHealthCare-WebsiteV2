@@ -14,6 +14,7 @@ import AdminOverview from "./pages/admin/AdminOverview";
 import AdminDoctors from "./pages/admin/AdminDoctors";
 import AdminSpecializations from "./pages/admin/AdminSpecializations";
 import AdminSchedules from "./pages/admin/AdminSchedules";
+import AdminTests from "./pages/admin/AdminTests";
 import NotFound from "./pages/NotFound";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="doctors" element={<AdminDoctors />} />
             <Route path="specializations" element={<AdminSpecializations />} />
             <Route path="schedules" element={<AdminSchedules />} />
+            <Route path="tests" element={<AdminTests />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

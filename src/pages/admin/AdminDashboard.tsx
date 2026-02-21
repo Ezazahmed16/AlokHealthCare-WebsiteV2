@@ -1,17 +1,19 @@
 import { useEffect } from "react";
 import { useNavigate, Link, Outlet, useLocation } from "react-router-dom";
-import { Users, Calendar, LayoutDashboard, Loader2, ArrowLeft, LogOut, Tag } from "lucide-react";
+import { Users, Calendar, LayoutDashboard, Loader2, ArrowLeft, LogOut, Tag, FlaskConical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { HOSPITAL_CONFIG } from "@/lib/constants";
 import { toast } from "sonner";
 
+
 const sidebarLinks = [
   { href: "/admin", label: "ওভারভিউ", labelEn: "Overview", icon: LayoutDashboard, exact: true },
   { href: "/admin/doctors", label: "ডাক্তার", labelEn: "Doctors", icon: Users },
   { href: "/admin/specializations", label: "বিশেষত্ব", labelEn: "Specializations", icon: Tag },
   { href: "/admin/schedules", label: "সময়সূচী", labelEn: "Schedules", icon: Calendar },
+  { href: "/admin/tests", label: "পরীক্ষা-নিরীক্ষা", labelEn: "Tests", icon: FlaskConical },
 ];
 
 const AdminDashboard = () => {

@@ -11,7 +11,7 @@ export function Hero() {
             linear-gradient(0deg, rgba(0, 174, 239, 0.2), rgba(0, 174, 239, 0.2)),
             linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0) 28.14%),
             linear-gradient(180deg, rgba(0, 0, 0, 0) 74.31%, rgba(0, 0, 0, 0.3) 100%),
-            url('/hero_bg.png')
+            url('/hero_bd.png')
           `,
           backgroundSize: "cover",
           backgroundPosition: "center",
