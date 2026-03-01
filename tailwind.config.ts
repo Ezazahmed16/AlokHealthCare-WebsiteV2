@@ -5,9 +5,21 @@ export default {
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
+    // 1. Define standard screen sizes outside of 'extend' for cleaner logic
+    screens: {
+      'xs': '400px',    // Small phones
+      'sm': '640px',    // Standard mobile
+      'md': '768px',    // Tablets
+      'lg': '1024px',   // Laptops (Slider shows 3 here)
+      'xl': '1280px',   // Desktop
+      '2xl': '1400px',  // Wide Screens
+    },
     container: {
       center: true,
-      padding: "1rem",
+      padding: {
+        DEFAULT: "1rem",
+        sm: "2rem",
+      },
       screens: {
         "2xl": "1280px",
       },

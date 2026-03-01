@@ -246,3 +246,59 @@
 .stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
 .stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
 .stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
+
+
+/* Fix for React-Slick horizontal overflow */
+.slick-list {
+  margin: 0 -10px; /* Aligns with the card padding */
+}
+
+.slick-slide > div {
+  padding: 0 10px; /* Creates consistent spacing between doctor cards */
+}
+
+/* Ensure images don't distort */
+.slick-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Prevent the slider from breaking the page width on small screens */
+.hero-doctor-slider,
+.featured-doctors-slider,
+.testimonials-slider {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Featured doctors: responsive dots spacing */
+.featured-doctors-slider .slick-dots {
+  bottom: 0;
+  padding-bottom: 0.5rem;
+}
+
+.featured-doctors-slider .slick-dots li button:before {
+  font-size: 8px;
+}
+
+@media (min-width: 640px) {
+  .featured-doctors-slider .slick-dots li button:before {
+    font-size: 10px;
+  }
+}
+
+/* Testimonials slider dots */
+.testimonials-slider .slick-dots {
+  bottom: -0.5rem;
+}
+
+.testimonials-slider .slick-dots li button:before {
+  font-size: 8px;
+}
+
+@media (min-width: 640px) {
+  .testimonials-slider .slick-dots li button:before {
+    font-size: 10px;
+  }
+}
