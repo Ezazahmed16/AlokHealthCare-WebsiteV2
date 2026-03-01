@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import { MdArrowRightAlt } from "react-icons/md";
@@ -39,94 +39,95 @@ const ArrowButton = ({ onClick, direction, className }: ArrowProps) => {
   );
 };
 
-/* --- Doctor Card Component --- */
-const DoctorCard = ({ doctor }: { doctor: Doctor }) => (
-  <div className="px-2 sm:px-3 pb-6">
-    <div className="bg-white shadow-md rounded-2xl overflow-hidden h-full flex flex-col hover:shadow-xl transition-all duration-300">
-      <figure className="h-48 sm:h-56 md:h-64 lg:h-72 w-full bg-gray-100 overflow-hidden flex-shrink-0">
-        <img
-          src={doctor.image_url || "https://placehold.co/400x500?text=No+Image"}
-          alt={doctor.name}
-          className="h-full w-full object-cover object-top"
-          loading="lazy"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = "https://placehold.co/400x500?text=No+Image";
-          }}
-        />
-      </figure>
-      <div className="flex flex-col flex-grow p-4 sm:p-5 text-center">
-        <div className="flex-grow">
-          <h2 className="text-base sm:text-lg font-bold mb-2 line-clamp-2">{doctor.name}</h2>
-          <div className="space-y-1 text-xs sm:text-sm text-gray-600">
-            <p><strong>বিশেষত্ব:</strong> {doctor.specialization || "General"}</p>
-            <p><strong>যোগ্যতা:</strong> {doctor.qualification || "N/A"}</p>
-          </div>
-        </div>
-        <div className="mt-4 flex justify-center">
-          <Link
-            to={`/doctors/${doctor.id}`}
-            className="inline-flex items-center gap-2 border-2 border-[#00AEEF] rounded-full py-2 px-4 sm:px-6 text-xs sm:text-sm hover:bg-[#00AEEF] hover:text-white transition-all"
-          >
-            বিস্তারিত দেখুন <MdArrowRightAlt size={18} className="flex-shrink-0" />
-          </Link>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
 export function FeaturedDoctors() {
   const { data: doctors, isLoading } = useDoctors();
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Force a re-mount to ensure real phone dimensions are captured
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const sliderData = doctors ?? [];
   const doctorCount = sliderData.length;
 
-  const settings = useMemo(
-    () => ({
-      dots: true,
-      infinite: doctorCount > 1,
-      speed: 500,
-      slidesToShow: Math.min(3, doctorCount),
-      slidesToScroll: 1,
-      nextArrow: <ArrowButton direction="next" />,
-      prevArrow: <ArrowButton direction="prev" />,
-      adaptiveHeight: true,
-      responsive: [
-        { breakpoint: 1280, settings: { slidesToShow: Math.min(3, doctorCount) } },
-        { breakpoint: 1024, settings: { slidesToShow: Math.min(2, doctorCount) } },
-        {
-          breakpoint: 640,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            arrows: false,
-          },
+  const settings = {
+    dots: true,
+    infinite: doctorCount > 3,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    arrows: true,
+    nextArrow: <ArrowButton direction="next" />,
+    prevArrow: <ArrowButton direction="prev" />,
+    touchThreshold: 100,
+    useTransform: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          infinite: doctorCount > 2,
         },
-      ],
-    }),
-    [doctorCount]
-  );
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: false,
+          infinite: doctorCount > 1,
+          centerMode: false,
+        },
+      },
+    ],
+  };
 
-  if (isLoading) {
-    return (
-      <section className="py-10 bg-[#F3F3F3]">
-        <div className="container mx-auto px-4 py-20 text-center text-gray-500">Loading Doctors...</div>
-      </section>
-    );
-  }
-
+  if (isLoading || !isMounted) return null;
   if (doctorCount === 0) return null;
 
   return (
-    <section className="py-8 sm:py-10 bg-[#F3F3F3] overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6">
-        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#005A92] text-center py-6 sm:py-10 px-2">
+    <section className="py-10 bg-[#F3F3F3] overflow-x-hidden">
+      <div className="container mx-auto px-4">
+        <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-[#005A92] custom-bangla-font text-center py-10">
           বিশেষজ্ঞ ডাক্তারদের সাথে সুস্বাস্থ্যের পথে এক ধাপ এগিয়ে
-        </h2>
+        </h1>
 
-        <div className="featured-doctors-slider relative max-w-full mx-auto">
-          <Slider {...settings}>
-            {sliderData.map((doctor) => (
-              <DoctorCard key={doctor.id} doctor={doctor} />
+        <div className="doctor-slider-wrapper">
+          <Slider key={doctorCount} {...settings}>
+            {sliderData.map((doctor: Doctor) => (
+              <div key={doctor.id} className="outline-none">
+                <div className="mx-2 mb-8 card bg-white shadow-xl rounded-2xl overflow-hidden h-full flex flex-col">
+                  <figure className="h-48 sm:h-56 md:h-64 lg:h-72 w-full bg-gray-100 overflow-hidden flex-shrink-0">
+                    <img
+                      src={doctor.image_url || "https://placehold.co/400x500?text=No+Image"}
+                      alt={doctor.name}
+                      className="h-full w-full object-cover object-top"
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://placehold.co/400x500?text=No+Image";
+                      }}
+                    />
+                  </figure>
+                  <div className="flex flex-col flex-grow p-4 sm:p-5 text-center">
+                    <div className="flex-grow">
+                      <h2 className="text-base sm:text-lg font-bold mb-2 line-clamp-2">{doctor.name}</h2>
+                      <div className="space-y-1 text-xs sm:text-sm text-gray-600">
+                        <p><strong>বিশেষত্ব:</strong> {doctor.specialization || "General"}</p>
+                        <p><strong>যোগ্যতা:</strong> {doctor.qualification || "N/A"}</p>
+                      </div>
+                    </div>
+                    <div className="mt-4 flex justify-center">
+                      <Link
+                        to={`/doctors/${doctor.id}`}
+                        className="inline-flex items-center gap-2 border-2 border-[#00AEEF] rounded-full py-2 px-4 sm:px-6 text-xs sm:text-sm hover:bg-[#00AEEF] hover:text-white transition-all"
+                      >
+                        বিস্তারিত দেখুন <MdArrowRightAlt size={18} className="flex-shrink-0" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ))}
           </Slider>
         </div>

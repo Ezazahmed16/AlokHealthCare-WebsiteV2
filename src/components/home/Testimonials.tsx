@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -112,6 +112,14 @@ const TestimonialCard = ({ name, text, boldText }: TestimonialData) => (
 
 /* --- Main Component --- */
 export const Testimonials = () => {
+  const [navKey, setNavKey] = useState(0);
+
+  // Force slider to re-initialize after mount so real phones get correct dimensions
+  useEffect(() => {
+    const timer = setTimeout(() => setNavKey((prev) => prev + 1), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const settings = useMemo(
     () => ({
       className: "testimonial-slider",
@@ -123,17 +131,20 @@ export const Testimonials = () => {
       speed: 500,
       autoplay: true,
       autoplaySpeed: 4000,
+      touchThreshold: 10,
+      useTransform: true,
       nextArrow: <ArrowButton direction="next" />,
       prevArrow: <ArrowButton direction="prev" />,
       responsive: [
         { breakpoint: 1280, settings: { slidesToShow: 3, centerPadding: "12px" } },
         { breakpoint: 1024, settings: { slidesToShow: 2, centerPadding: "16px" } },
         {
-          breakpoint: 640,
+          breakpoint: 768,
           settings: {
             slidesToShow: 1,
             centerPadding: "12px",
             arrows: false,
+            centerMode: false,
           },
         },
       ],
@@ -151,7 +162,7 @@ export const Testimonials = () => {
         </div>
 
         <div className="testimonials-slider max-w-full mx-auto">
-          <Slider {...settings}>
+          <Slider key={navKey} {...settings}>
             {testimonialsData.map((item) => (
               <TestimonialCard key={item.id} {...item} />
             ))}

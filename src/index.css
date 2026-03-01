@@ -272,20 +272,27 @@
   overflow: hidden;
 }
 
-/* Featured doctors: responsive dots spacing */
-.featured-doctors-slider .slick-dots {
-  bottom: 0;
-  padding-bottom: 0.5rem;
+/* Fix for real mobile devices - Featured Doctors slider */
+.doctor-slider-wrapper .slick-list {
+  margin: 0 -10px;
+  overflow: visible !important;
 }
 
-.featured-doctors-slider .slick-dots li button:before {
-  font-size: 8px;
+.doctor-slider-wrapper .slick-track {
+  display: flex !important;
 }
 
-@media (min-width: 640px) {
-  .featured-doctors-slider .slick-dots li button:before {
-    font-size: 10px;
+@media (max-width: 767px) {
+  .doctor-slider-wrapper .slick-slide {
+    width: calc(100vw - 40px) !important;
+    display: flex !important;
+    justify-content: center;
   }
+}
+
+/* Ensure doctor slider dots are visible and not overlapping content */
+.doctor-slider-wrapper .slick-dots {
+  bottom: -40px !important;
 }
 
 /* Testimonials slider dots */
