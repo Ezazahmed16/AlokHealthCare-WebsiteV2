@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -10,41 +10,6 @@ interface TestimonialData {
   text: string;
   boldText: string;
 }
-
-interface ArrowProps {
-  onClick?: () => void;
-  direction: "prev" | "next";
-  className?: string;
-}
-
-/* --- Arrow Button Component --- */
-const ArrowButton = ({ onClick, direction, className }: ArrowProps) => {
-  if (className?.includes("slick-disabled")) return null;
-
-  const isNext = direction === "next";
-  return (
-    <button
-      onClick={onClick}
-      type="button"
-      aria-label={isNext ? "Next testimonial" : "Previous testimonial"}
-      className={`absolute top-1/2 -translate-y-1/2 z-20 text-[#00AEEF] hover:text-[#005A92] 
-        focus:outline-none transition-colors duration-300 hidden sm:block
-        ${isNext ? "right-2 lg:right-[-20px] xl:right-[-30px]" : "left-2 lg:left-[-20px] xl:left-[-30px]"}`}
-    >
-      {isNext ? (
-        <svg width="40" height="40" viewBox="0 0 56 56" fill="none" className="drop-shadow-lg sm:w-12 sm:h-12 xl:w-14 xl:h-14">
-          <path d="M28 51.3334C15.1134 51.3334 4.6667 40.8867 4.6667 28.0001C4.6667 15.1134 15.1134 4.66675 28 4.66675C40.8867 4.66675 51.3334 15.1134 51.3334 28.0001C51.3334 40.8867 40.8867 51.3334 28 51.3334Z" stroke="#001522" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M25.06 36.2365L33.2733 27.9998L25.06 19.7632" stroke="#001522" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      ) : (
-        <svg width="40" height="40" viewBox="0 0 56 56" fill="none" className="drop-shadow-lg sm:w-12 sm:h-12 xl:w-14 xl:h-14">
-          <path d="M28 51.3334C40.8867 51.3334 51.3333 40.8867 51.3333 28.0001C51.3333 15.1134 40.8867 4.66675 28 4.66675C15.1134 4.66675 4.66667 15.1134 4.66667 28.0001C4.66667 40.8867 15.1134 51.3334 28 51.3334Z" stroke="#001522" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M30.94 36.2365L22.7266 27.9998L30.94 19.7632" stroke="#001522" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      )}
-    </button>
-  );
-};
 
 /* --- Data: 11 Testimonials --- */
 const testimonialsData: TestimonialData[] = [
@@ -112,61 +77,86 @@ const TestimonialCard = ({ name, text, boldText }: TestimonialData) => (
 
 /* --- Main Component --- */
 export const Testimonials = () => {
-  const [navKey, setNavKey] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
+  const sliderRef = useRef<Slider | null>(null);
 
-  // Force slider to re-initialize after mount so real phones get correct dimensions
+  // Force a re-mount to ensure real phone dimensions are captured
   useEffect(() => {
-    const timer = setTimeout(() => setNavKey((prev) => prev + 1), 100);
-    return () => clearTimeout(timer);
+    setIsMounted(true);
   }, []);
 
-  const settings = useMemo(
-    () => ({
-      className: "testimonial-slider",
-      centerMode: true,
-      infinite: true,
-      centerPadding: "8px",
-      dots: true,
-      slidesToShow: 3,
-      speed: 500,
-      autoplay: true,
-      autoplaySpeed: 4000,
-      touchThreshold: 10,
-      useTransform: true,
-      nextArrow: <ArrowButton direction="next" />,
-      prevArrow: <ArrowButton direction="prev" />,
-      responsive: [
-        { breakpoint: 1280, settings: { slidesToShow: 3, centerPadding: "12px" } },
-        { breakpoint: 1024, settings: { slidesToShow: 2, centerPadding: "16px" } },
-        {
-          breakpoint: 768,
-          settings: {
-            slidesToShow: 1,
-            centerPadding: "12px",
-            arrows: false,
-            centerMode: false,
-          },
-        },
-      ],
-    }),
-    []
-  );
+// Testimonials.tsx এর settings অংশ
+const settings = {
+  className: "testimonial-slider",
+  centerMode: true,
+  infinite: true,
+  centerPadding: "0", // ডেস্কটপে জিরো রাখুন
+  dots: true,
+  slidesToShow: 3,
+  speed: 500,
+  autoplay: true,
+  autoplaySpeed: 4000,
+  arrows: false,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 2,
+        centerMode: true,
+        centerPadding: "20px",
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 1,
+        centerMode: true,
+        centerPadding: "30px", // মাঝখানের কার্ডটি ফোকাস করতে সাহায্য করবে
+        arrows: false,
+      },
+    },
+  ],
+};
+
+  if (!isMounted) return null;
 
   return (
-    <section className="py-10 sm:py-12 md:py-16 bg-[#EBEBEB] overflow-hidden" aria-labelledby="testimonials-heading">
-      <div className="container mx-auto relative px-4 sm:px-6">
+    <section className="py-10 sm:py-12 md:py-16 bg-[#EBEBEB] overflow-x-hidden" aria-labelledby="testimonials-heading">
+      <div className="container mx-auto relative px-4">
         <div className="text-center mb-8 sm:mb-12 md:mb-16">
           <h2 id="testimonials-heading" className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#005A92] custom-bangla-font px-2">
             আপনার মতামত আমাদের প্রেরণা
           </h2>
         </div>
 
-        <div className="testimonials-slider max-w-full mx-auto">
-          <Slider key={navKey} {...settings}>
+        <div className="testimonial-slider-wrapper">
+          <Slider key="testimonials" ref={sliderRef} {...settings}>
             {testimonialsData.map((item) => (
-              <TestimonialCard key={item.id} {...item} />
+              <div key={item.id} className="outline-none">
+                <div className="px-2">
+                  <TestimonialCard {...item} />
+                </div>
+              </div>
             ))}
           </Slider>
+          <div className="mt-12 flex justify-center gap-4 mx-4 sm:mx-8">
+            <button
+              type="button"
+              onClick={() => sliderRef.current?.slickPrev()}
+              aria-label="Previous testimonial"
+              className="w-10 h-10 flex items-center justify-center rounded-full border border-[#00AEEF] text-[#00AEEF] text-lg font-semibold hover:bg-[#00AEEF] hover:text-white transition"
+            >
+              &lt;
+            </button>
+            <button
+              type="button"
+              onClick={() => sliderRef.current?.slickNext()}
+              aria-label="Next testimonial"
+              className="w-10 h-10 flex items-center justify-center rounded-full border border-[#00AEEF] text-[#00AEEF] text-lg font-semibold hover:bg-[#00AEEF] hover:text-white transition"
+            >
+              &gt;
+            </button>
+          </div>
         </div>
       </div>
     </section>

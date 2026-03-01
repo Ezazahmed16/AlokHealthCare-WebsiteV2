@@ -1,3 +1,4 @@
+import { HOSPITAL_CONFIG } from '@/lib/constants'
 import React from 'react'
 
 const ContactDetails = () => {
@@ -27,8 +28,8 @@ const ContactDetails = () => {
                             </defs>
                         </svg>
                         <p className='text-[#001522] text-sm md:text-xl'>
-                            <span className='font-bold'>ঠিকানা: </span> বাড়ি নং XXX, সড়ক নং XXX, এলাকা,
-                            <br />শহর - XXXX, বাংলাদেশ</p>
+                            <span className='font-bold'>ঠিকানা: 
+                                </span>{HOSPITAL_CONFIG.address}</p>
                     </div>
 
                     <div className="flex items-center justify-start gap-3 mt-4">
@@ -43,8 +44,10 @@ const ContactDetails = () => {
                             </defs>
                         </svg>
                         <p className='text-[#001522] text-sm md:text-xl'>
-                            <span className='font-bold'>হটলাইন: </span>
-                            +৮৮ ০১৭XXXXXXXX
+                            <span className='font-bold'>হটলাইন: 
+
+                            </span>
+                            {HOSPITAL_CONFIG.phone}
                         </p>
                     </div>
 
@@ -55,7 +58,7 @@ const ContactDetails = () => {
                         <p className='text-[#001522] text-sm md:text-xl'>
                             <span className='font-bold'>ই-মেইল: </span>
                             <span className='font-sans'>
-                                info@example.com
+                                {HOSPITAL_CONFIG.email}
                             </span>
                         </p>
                     </div>

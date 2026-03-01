@@ -267,26 +267,43 @@
 /* Prevent the slider from breaking the page width on small screens */
 .hero-doctor-slider,
 .featured-doctors-slider,
-.testimonials-slider {
+.testimonials-slider,
+.doctor-slider-wrapper,
+.testimonial-slider-wrapper {
   max-width: 100%;
   overflow: hidden;
 }
 
-/* Fix for real mobile devices - Featured Doctors slider */
-.doctor-slider-wrapper .slick-list {
+/* স্লাইডার কন্টেইনার ফিক্স - Slider container fix */
+.doctor-slider-wrapper .slick-list,
+.testimonial-slider-wrapper .slick-list {
   margin: 0 -10px;
   overflow: visible !important;
 }
 
 .doctor-slider-wrapper .slick-track {
   display: flex !important;
+  align-items: center;
+}
+
+.doctor-slider-wrapper .slick-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  opacity: 0.5;
+  transform: scale(0.9);
+}
+
+.doctor-slider-wrapper .slick-center {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  z-index: 10;
 }
 
 @media (max-width: 767px) {
   .doctor-slider-wrapper .slick-slide {
     width: calc(100vw - 40px) !important;
-    display: flex !important;
-    justify-content: center;
   }
 }
 
@@ -295,17 +312,59 @@
   bottom: -40px !important;
 }
 
-/* Testimonials slider dots */
-.testimonials-slider .slick-dots {
-  bottom: -0.5rem;
+/* Testimonials slider track & slides */
+.testimonial-slider-wrapper .slick-track {
+  display: flex !important;
+  align-items: center;
 }
 
-.testimonials-slider .slick-dots li button:before {
-  font-size: 8px;
+.testimonial-slider-wrapper .slick-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  opacity: 0.5;
+  transform: scale(0.9);
+}
+
+.testimonial-slider-wrapper .slick-center {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  z-index: 10;
+}
+
+@media (max-width: 767px) {
+  .testimonial-slider-wrapper .slick-slide {
+    width: calc(100vw - 40px) !important;
+  }
+}
+
+/* Ensure testimonial slider dots are visible and not overlapping content */
+.testimonial-slider-wrapper .slick-dots {
+  bottom: -40px !important;
+}
+
+.testimonial-slider-wrapper .slick-dots li button:before {
+  font-size: 12px;
+  margin: 0 4px;
 }
 
 @media (min-width: 640px) {
-  .testimonials-slider .slick-dots li button:before {
+  .testimonial-slider-wrapper .slick-dots li button:before {
     font-size: 10px;
+  }
+}
+
+/* মোবাইলের জন্য বাটন পজিশন ঠিক করা - Mobile button position */
+@media (max-width: 768px) {
+  .doctor-slider-wrapper .slick-prev,
+  .testimonial-slider-wrapper .slick-prev {
+    left: 5px !important;
+    z-index: 10;
+  }
+  .doctor-slider-wrapper .slick-next,
+  .testimonial-slider-wrapper .slick-next {
+    right: 5px !important;
+    z-index: 10;
   }
 }

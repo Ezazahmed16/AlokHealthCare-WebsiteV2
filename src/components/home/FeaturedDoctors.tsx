@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import { MdArrowRightAlt } from "react-icons/md";
@@ -42,6 +42,7 @@ const ArrowButton = ({ onClick, direction, className }: ArrowProps) => {
 export function FeaturedDoctors() {
   const { data: doctors, isLoading } = useDoctors();
   const [isMounted, setIsMounted] = useState(false);
+  const sliderRef = useRef<Slider | null>(null);
 
   // Force a re-mount to ensure real phone dimensions are captured
   useEffect(() => {
@@ -51,37 +52,47 @@ export function FeaturedDoctors() {
   const sliderData = doctors ?? [];
   const doctorCount = sliderData.length;
 
-  const settings = {
-    dots: true,
-    infinite: doctorCount > 3,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    arrows: true,
-    nextArrow: <ArrowButton direction="next" />,
-    prevArrow: <ArrowButton direction="prev" />,
-    touchThreshold: 100,
-    useTransform: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          infinite: doctorCount > 2,
-        },
+// FeaturedDoctors.tsx এর settings অংশটি এভাবে পরিবর্তন করুন
+const settings = {
+  dots: false,
+  infinite: true, // ডাক্তার সংখ্যা যাই হোক, লুপ চালু রাখতে true দিন
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  centerMode: true, // ডেস্কটপেও মাঝখানের কার্ডটি হাইলাইট করার জন্য
+  centerPadding: "0px",
+  nextArrow: <ArrowButton direction="next" />,
+  prevArrow: <ArrowButton direction="prev" />,
+  touchThreshold: 100,
+  useTransform: true,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 2,
+        centerMode: true,
       },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          arrows: false,
-          infinite: doctorCount > 1,
-          centerMode: false,
-        },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 1,
+        centerMode: true,
+        centerPadding: "40px", // এটি দিলে পরের এবং আগের কার্ডের কিছু অংশ দেখা যাবে
+        arrows: false, // মোবাইলে সোয়াইপ সহজ তাই অ্যারো বন্ধ রাখা ভালো
       },
-    ],
-  };
+    },
+    {
+      breakpoint: 480, // একদম ছোট ফোনের জন্য (যেমন আপনার স্ক্রিনশট)
+      settings: {
+        slidesToShow: 1,
+        centerMode: true,
+        centerPadding: "20px",
+        arrows: false,
+      },
+    },
+  ],
+};
 
   if (isLoading || !isMounted) return null;
   if (doctorCount === 0) return null;
@@ -94,7 +105,11 @@ export function FeaturedDoctors() {
         </h1>
 
         <div className="doctor-slider-wrapper">
-          <Slider key={doctorCount} {...settings}>
+          <Slider
+            key={doctorCount}
+            ref={sliderRef}
+            {...settings}
+          >
             {sliderData.map((doctor: Doctor) => (
               <div key={doctor.id} className="outline-none">
                 <div className="mx-2 mb-8 card bg-white shadow-xl rounded-2xl overflow-hidden h-full flex flex-col">
@@ -130,6 +145,24 @@ export function FeaturedDoctors() {
               </div>
             ))}
           </Slider>
+          <div className="mt-4 flex justify-center gap-4 mx-4 sm:mx-8">
+            <button
+              type="button"
+              onClick={() => sliderRef.current?.slickPrev()}
+              aria-label="Previous doctor"
+              className="w-10 h-10 flex items-center justify-center rounded-full border border-[#00AEEF] text-[#00AEEF] text-lg font-semibold hover:bg-[#00AEEF] hover:text-white transition"
+            >
+              &lt;
+            </button>
+            <button
+              type="button"
+              onClick={() => sliderRef.current?.slickNext()}
+              aria-label="Next doctor"
+              className="w-10 h-10 flex items-center justify-center rounded-full border border-[#00AEEF] text-[#00AEEF] text-lg font-semibold hover:bg-[#00AEEF] hover:text-white transition"
+            >
+              &gt;
+            </button>
+          </div>
         </div>
       </div>
     </section>
