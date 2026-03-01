@@ -54,12 +54,12 @@ export function FeaturedDoctors() {
 
 // FeaturedDoctors.tsx এর settings অংশটি এভাবে পরিবর্তন করুন
 const settings = {
-  dots: false,
-  infinite: true, // ডাক্তার সংখ্যা যাই হোক, লুপ চালু রাখতে true দিন
+  dots: true,
+  infinite: doctorCount > 3,
   speed: 500,
   slidesToShow: 3,
   slidesToScroll: 1,
-  centerMode: true, // ডেস্কটপেও মাঝখানের কার্ডটি হাইলাইট করার জন্য
+  centerMode: true, // Desktop: Highlight middle card
   centerPadding: "0px",
   nextArrow: <ArrowButton direction="next" />,
   prevArrow: <ArrowButton direction="prev" />,
@@ -71,28 +71,22 @@ const settings = {
       settings: {
         slidesToShow: 2,
         centerMode: true,
-      },
-    },
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 1,
-        centerMode: true,
-        centerPadding: "40px", // এটি দিলে পরের এবং আগের কার্ডের কিছু অংশ দেখা যাবে
-        arrows: false, // মোবাইলে সোয়াইপ সহজ তাই অ্যারো বন্ধ রাখা ভালো
-      },
-    },
-    {
-      breakpoint: 480, // একদম ছোট ফোনের জন্য (যেমন আপনার স্ক্রিনশট)
-      settings: {
-        slidesToShow: 1,
-        centerMode: true,
         centerPadding: "20px",
+      },
+    },
+    {
+      breakpoint: 768, // Mobile View Fix
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        centerMode: false, // CRITICAL: Stop forcing 3 cards into mobile view
+        centerPadding: "0px",
         arrows: false,
+        dots: true,
       },
     },
   ],
-};
+}; 
 
   if (isLoading || !isMounted) return null;
   if (doctorCount === 0) return null;
@@ -145,7 +139,7 @@ const settings = {
               </div>
             ))}
           </Slider>
-          <div className="mt-4 flex justify-center gap-4 mx-4 sm:mx-8">
+          {/* <div className="mt-4 flex justify-center gap-4 mx-4 sm:mx-8">
             <button
               type="button"
               onClick={() => sliderRef.current?.slickPrev()}
@@ -162,7 +156,7 @@ const settings = {
             >
               &gt;
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
