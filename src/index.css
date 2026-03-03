@@ -253,60 +253,132 @@
 
 
 
+/* ── DOCTOR SLIDER ── */
+/* ── EMBLA DOCTOR SLIDER ── */
 
-
-/* --- FIXED DIMENSION SLIDER CONFIG --- */
-
-/* Align all slider tracks to have consistent stretching */
-.doctor-slider-wrapper .slick-track,
-.testimonial-slider-wrapper .slick-track {
-  display: flex !important;
-  align-items: stretch; /* All cards in a row have equal height */
+.embla-viewport {
+  overflow: hidden;
+  width: 100%;
 }
 
-/* Base slide settings: Opacity and scaling for center mode */
-.doctor-slider-wrapper .slick-slide {
-  display: flex !important;
-  justify-content: center;
-  transition: all 0.3s ease-in-out;
-  opacity: 0.5; /* Side cards are dimmed */
-  transform: scale(0.9); /* Side cards are slightly smaller */
+.embla-container {
+  display: flex;
+  align-items: stretch;
 }
 
-/* Force the fixed dimensions for the doctor card container */
-.doctor-slider-wrapper .card {
-  width: 320px !important;  /* Matches Figma Width */
-  height: 480px !important; /* Matches Figma Height */
-  margin: 20px auto;        /* Allows room for shadows */
-  display: flex !important;
-  flex-direction: column;
+/* Desktop: 3 cards visible, side cards dimmed */
+.embla-slide {
+  flex: 0 0 33.333%;
+  min-width: 0;
+  opacity: 0.5;
+  transform: scale(0.92);
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* The Active Center Card style */
-.doctor-slider-wrapper .slick-center {
-  opacity: 1 !important;
-  transform: scale(1) !important; /* Centered card is full size */
+.embla-slide--active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Arrow buttons */
+.embla-arrow {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
   z-index: 10;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00AEEF;
 }
 
-/* --- MOBILE RESPONSIVE FIX (Strictly 1-Card) --- */
+.embla-arrow-prev { left: -12px; }
+.embla-arrow-next { right: -12px; }
+
+/* Mobile: 1 card, full width, no dim */
 @media (max-width: 767px) {
-  /* Stop card compression on mobile screens (like 322px width) */
-  .doctor-slider-wrapper .slick-slide {
+  .embla-slide {
+    flex: 0 0 100%;      /* ✅ 1 card per view */
     opacity: 1 !important;
-    transform: none !important; 
-    width: 100vw !important; /* Take full viewport width */
+    transform: none !important;
+    transition: none !important;
   }
 
-  /* Adjust fixed dimensions to fit smaller phone widths */
-  .doctor-slider-wrapper .card {
-    width: 280px !important;  /* Safe width for small mobile */
-    height: 420px !important; /* Adjusted proportional height */
-    margin: 10px auto;
+  .embla-arrow {
+    display: none;       /* ✅ Hide arrows on mobile */
+  }
+}
+
+
+
+
+
+/* ── EMBLA TESTIMONIAL SLIDER ── */
+/* ── EMBLA TESTIMONIAL SLIDER ── */
+
+.testimonial-viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.testimonial-container {
+  display: flex;
+  align-items: stretch;
+}
+
+/* Desktop: 3 cards, side cards dimmed & scaled */
+.testimonial-slide {
+  flex: 0 0 33.333%;
+  min-width: 0;
+  opacity: 0.5;
+  transform: scale(0.92);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.testimonial-slide--active {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
+/* Arrows — desktop only */
+.testimonial-arrow {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00AEEF;
+}
+
+.testimonial-arrow-prev { left: -18px; }
+.testimonial-arrow-next { right: -18px; }
+
+/* Mobile: 1 card full width, no effects, hide arrows */
+@media (max-width: 767px) {
+  .testimonial-slide {
+    flex: 0 0 100%;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 
-  .doctor-slider-wrapper .slick-list {
-    margin: 0;
-    overflow: hidden !important; /* Hide partial side cards as per design */
+  .testimonial-arrow {
+    display: none !important;
   }
 }

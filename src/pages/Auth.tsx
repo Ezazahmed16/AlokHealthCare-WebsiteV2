@@ -154,7 +154,7 @@ const Auth = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@alokhealthcare.com"
+                  placeholder="Email"
                   value={signInData.email}
                   onChange={(e) => setSignInData({ ...signInData, email: e.target.value })}
                   className="h-12 pl-11 bg-muted/50 border-border focus:bg-background transition-colors"

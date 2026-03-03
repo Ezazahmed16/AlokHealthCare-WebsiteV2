@@ -5,11 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDoctorWithSchedule } from "@/hooks/useDoctors";
 import { generateWhatsAppLink } from "@/lib/whatsapp";
-import { DAYS_OF_WEEK } from "@/lib/constants";
+import { DAYS_OF_WEEK, HOSPITAL_CONFIG } from "@/lib/constants";
 
 const DoctorDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { data: doctor, isLoading } = useDoctorWithSchedule(id || "");
+
+  // ১. HOSPITAL_CONFIG থেকে জেনারেল ফোন নম্বর নিয়ে লিঙ্ক তৈরি (Renamed to hospitalWhatsappLink)
+  const whatsappNumber = HOSPITAL_CONFIG.phone.replace(/[^0-9]/g, ''); 
+  const hospitalWhatsappLink = `https://wa.me/${whatsappNumber}`;
 
   if (isLoading) {
     return (
@@ -185,12 +189,14 @@ const DoctorDetail = () => {
                   )}
 
                   {/* Appointment Button */}
+                  {/* Appointment Button - Redirects to WhatsApp */}
                   <div className="mt-8 hidden md:flex justify-center">
                     <Button
-                      className="bg-primary hover:bg-primary-dark text-primary-foreground font-semibold px-8 py-3 h-auto rounded-full"
+                      className="bg-primary hover:bg-primary-dark text-primary-foreground font-semibold px-8 py-3 h-auto rounded-full active:scale-95 transition-transform"
                       asChild
                     >
-                      <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                      {/* Note: I used hospitalWhatsappLink here. Use doctorWhatsappLink if you want direct doctor contact */}
+                      <a href={hospitalWhatsappLink} target="_blank" rel="noopener noreferrer">
                         অ্যাপয়েন্টমেন্ট নিন
                       </a>
                     </Button>
@@ -210,7 +216,7 @@ const DoctorDetail = () => {
           className="w-full bg-primary hover:bg-primary-dark text-primary-foreground font-semibold py-3 h-auto rounded-full"
           asChild
         >
-          <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+          <a href={hospitalWhatsappLink} target="_blank" rel="noopener noreferrer">
             অ্যাপয়েন্টমেন্ট নিন
           </a>
         </Button>

@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Plus, Pencil, Trash2, Loader2, Search, Users, Phone, PlusCircle } from "lucide-react";
+import { useState, useRef } from "react";
+import { Plus, Pencil, Trash2, Loader2, Search, Users, Phone, PlusCircle, Upload, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -69,6 +70,45 @@ const AdminDoctors = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [formData, setFormData] = useState<DoctorFormData>(emptyFormData);
   const [searchQuery, setSearchQuery] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("শুধুমাত্র ছবি ফাইল আপলোড করুন");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("ফাইল সাইজ ৫MB এর কম হতে হবে");
+      return;
+    }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const clearImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    setFormData({ ...formData, image_url: "" });
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const uploadImage = async (file: File): Promise<string> => {
+    const ext = file.name.split(".").pop();
+    const fileName = `${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage
+      .from("doctor-images")
+      .upload(fileName, file);
+    if (error) throw error;
+    const { data: urlData } = supabase.storage
+      .from("doctor-images")
+      .getPublicUrl(fileName);
+    return urlData.publicUrl;
+  };
 
   const handleAddSpecialization = async () => {
     if (!newSpecName.trim()) {
@@ -100,6 +140,8 @@ const AdminDoctors = () => {
   const handleOpenAdd = () => {
     setSelectedDoctor(null);
     setFormData(emptyFormData);
+    setImageFile(null);
+    setImagePreview(null);
     setIsDialogOpen(true);
   };
 
@@ -114,6 +156,8 @@ const AdminDoctors = () => {
       bio: doctor.bio || "",
       whatsapp_number: doctor.whatsapp_number || "",
     });
+    setImageFile(null);
+    setImagePreview(doctor.image_url || null);
     setIsDialogOpen(true);
   };
 
@@ -131,21 +175,36 @@ const AdminDoctors = () => {
       return;
     }
 
-    const dataToSubmit = {
-      ...formData,
-      image_url: formData.image_url || null,
-      bio: formData.bio || null,
-      whatsapp_number: formData.whatsapp_number || null,
-    };
+    try {
+      setIsUploading(true);
+      let imageUrl = formData.image_url || null;
 
-    if (selectedDoctor) {
-      await updateDoctor.mutateAsync({ id: selectedDoctor.id, ...dataToSubmit });
-    } else {
-      await createDoctor.mutateAsync(dataToSubmit);
+      if (imageFile) {
+        imageUrl = await uploadImage(imageFile);
+      }
+
+      const dataToSubmit = {
+        ...formData,
+        image_url: imageUrl,
+        bio: formData.bio || null,
+        whatsapp_number: formData.whatsapp_number || null,
+      };
+
+      if (selectedDoctor) {
+        await updateDoctor.mutateAsync({ id: selectedDoctor.id, ...dataToSubmit });
+      } else {
+        await createDoctor.mutateAsync(dataToSubmit);
+      }
+
+      setIsDialogOpen(false);
+      setFormData(emptyFormData);
+      setImageFile(null);
+      setImagePreview(null);
+    } catch (error) {
+      // handled by hooks
+    } finally {
+      setIsUploading(false);
     }
-
-    setIsDialogOpen(false);
-    setFormData(emptyFormData);
   };
 
   const handleDelete = async () => {
@@ -220,7 +279,7 @@ const AdminDoctors = () => {
               <CardHeader className="pb-3">
                 <div className="flex items-start gap-3">
                   <div className="h-14 w-14 rounded-full bg-secondary/10 flex items-center justify-center shrink-0 overflow-hidden">
-                    {doctor.image_url ? (
+                   {doctor.image_url ? (
                       <img
                         src={doctor.image_url}
                         alt={doctor.name}
@@ -375,13 +434,36 @@ const AdminDoctors = () => {
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="image">ছবির URL</Label>
-                <Input
-                  id="image"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                  placeholder="https://example.com/doctor-photo.jpg"
+                <Label>ছবি আপলোড করুন</Label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="hidden"
                 />
+                {imagePreview ? (
+                  <div className="relative w-24 h-24 rounded-lg overflow-hidden border border-border">
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={clearImage}
+                      className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-0.5"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full h-20 border-dashed flex flex-col gap-1"
+                  >
+                    <Upload className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">ছবি নির্বাচন করুন (সর্বোচ্চ ৫MB)</span>
+                  </Button>
+                )}
               </div>
 
               <div className="space-y-2 md:col-span-2">
@@ -403,7 +485,7 @@ const AdminDoctors = () => {
               <Button
                 type="submit"
                 variant="teal"
-                disabled={createDoctor.isPending || updateDoctor.isPending}
+                disabled={createDoctor.isPending || updateDoctor.isPending || isUploading}
               >
                 {(createDoctor.isPending || updateDoctor.isPending) && (
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
